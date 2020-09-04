@@ -23,6 +23,11 @@ class Post
     private $title;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=True)
+     */
+    private $slug;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $published;
@@ -88,5 +93,15 @@ class Post
         $this->author = $author;
 
         return $this;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 }
