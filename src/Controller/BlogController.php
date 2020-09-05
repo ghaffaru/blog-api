@@ -27,8 +27,12 @@ class BlogController extends AbstractController
      */
     public function index()
     {
+        $repo = $this->getDoctrine()->getRepository(Post::class);
+
+        $items = $repo->findAll();
+
         return $this->json([
-            'posts' => self::POSTS
+            'posts' => $items
         ], 200);
     }
 
@@ -37,11 +41,27 @@ class BlogController extends AbstractController
      */
     public function show($id)
     {
+        $repo = $this->getDoctrine()->getRepository(Post::class);
+
+        $item = $repo->find($id);
         return new JsonResponse([
-            "post" => self::POSTS[array_search($id, array_column(self::POSTS, 'id'))]
+            "post" => $item
         ]);
     }
 
+    /**
+     * @Route("/{slug}")
+     */
+    public function postBySlug($slug)
+    {
+        $repo = $this->getDoctrine()->getRepository(Post::class);
+
+        $item = $repo->findOneBy(['slug' => $slug]);
+
+        return $this->json([
+            'post' => $item
+        ]);
+    }
     /**
      * @Route("/add", name="post_add", methods={"POST"})
      */
