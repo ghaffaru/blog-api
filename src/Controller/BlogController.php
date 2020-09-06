@@ -37,20 +37,23 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show", requirements={"id"="\d+"})
+     * @Route("/post/{id}", name="show", requirements={"id"="\d+"})
+     *
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $repo = $this->getDoctrine()->getRepository(Post::class);
+        
+        // $repo = $this->getDoctrine()->getRepository(Post::class);
 
-        $item = $repo->find($id);
-        return new JsonResponse([
-            "post" => $item
+        // $post = $repo->find($id);
+
+        return $this->json([
+            "post" => $post
         ]);
     }
 
     /**
-     * @Route("/{slug}")
+     * @Route("/post/{slug}")
      */
     public function postBySlug($slug)
     {
@@ -63,7 +66,7 @@ class BlogController extends AbstractController
         ]);
     }
     /**
-     * @Route("/add", name="post_add", methods={"POST"})
+     * @Route("/post/add", name="post_add", methods={"POST"})
      */
     public function store(Request $request)
     {
@@ -83,6 +86,24 @@ class BlogController extends AbstractController
             'post' => $post
         ]);
     }
+
+    /**
+     * @Route("/post/{id}", methods={"DELETE"})
+     */
+    public function delete(Post $post)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $entityManager->remove($post);
+
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Post deleted'
+        ]);
+    }
+
+    
 }
 
 
